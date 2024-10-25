@@ -1,13 +1,7 @@
 import redis.asyncio as redis
 import asyncio
-from  gsmNetworkManager import GsmModule
-from ethernetNetworkManager import Ethernet
-from wifiNetworkManager import WiFi
-# Global nesneler
-wifi_manager = None
-ethernet_manager = None
-gsm_manager = None
-redis_client = None
+
+
 class WifiManager:
     def __init__(self):
         self._enabled = True 
@@ -75,6 +69,8 @@ gsm_manager = GsmManager()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 class NetworkManager:
+    
+    
     def __init__(self):
         self._case_number = 8  
         
@@ -134,6 +130,10 @@ class NetworkManager:
 
 
 async def main():
+    from gsmNetworkManager import GsmModule
+    from ethernetNetworkManager import Ethernet
+    from wifiNetworkManager import WiFi
+# Global nesneler
     network_manager = NetworkManager()
     gsm_module = GsmModule()
     ethernet_control = Ethernet()
