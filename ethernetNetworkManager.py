@@ -3,7 +3,7 @@ import subprocess
 from networkController import ethernet_manager,redis_client
 
 
-# Bu koda https://github.com/abdulhamitmercan adresinden erişebilirsiniz
+# Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
 # Bu kod, Ethernet kablosu bağlı olduğunda internet bağlantısını sorgular, 
 # aksi durumlarda ise Ethernet bağlantısını kontrol etmeyip sonlandırır.
 # Ethernet etkinliği, kablo durumu ve internet bağlantı durumu gibi çeşitli 

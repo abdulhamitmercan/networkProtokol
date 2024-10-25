@@ -3,7 +3,7 @@ import subprocess
 from networkController import gsm_manager,redis_client
 
 
-# Bu koda https://github.com/abdulhamitmercan den erişebilirsiniz
+# Bu koda https://github.com/abdulhamitmercan/networkProtokol den erişebilirsiniz
 # Kod, bir GSM modemini ve bağlantı durumlarını kontrol eden bir sınıf olan `GsmModule`'u tanımlar. 
 # Belirli aralıklarla GSM modemin durumu kontrol edilir, AT komutları ile modemden gelen bilgiler toplanır 
 # ve internet bağlantısı kontrol edilerek sinyal gücü değerlendirilir. 

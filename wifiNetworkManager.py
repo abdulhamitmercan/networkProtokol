@@ -2,7 +2,7 @@ import asyncio
 import subprocess
 from networkController import wifi_manager, redis_client
 
-# Bu koda https://github.com/abdulhamitmercan adresinden erişebilirsiniz
+# Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
 # Bu kod, Wi-Fi bağlantısını yönetmek için bir sınıf tanımlar.
 # Sınıf, Wi-Fi durumunu kontrol eder, internet bağlantısını test eder ve gerekli durum güncellemelerini Redis veritabanına kaydeder.
 # Asenkron programlama ile Wi-Fi yönetimini sağlar.

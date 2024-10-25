@@ -2,7 +2,7 @@ import redis.asyncio as redis
 import asyncio
 
 # Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
-# Bu koda https://github.com/abdulhamitmercan adresinden erişebilirsiniz
+# Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
 # Bu kod, Wi-Fi, Ethernet ve GSM bağlantılarını yönetmek için çeşitli sınıflar içerir.
 # Bu yöneticiler, belirli bir durumda hangi bağlantının etkinleştirileceğini veya devre dışı bırakılacağını kontrol eder.
 # Ayrıca, Redis veritabanından alınan "caseVal" değerine göre bağlantı durumunu sürekli günceller.
@@ -122,6 +122,7 @@ class NetworkManager:
             if case_value is None:
                 print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
                 case_value = '7'
+                asyncio.sleep(0.2)
             else:
                 case_value = int(case_value)
             
