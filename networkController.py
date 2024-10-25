@@ -122,7 +122,7 @@ class NetworkManager:
             if case_value is None:
                # print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
                 case_value = '7'
-                asyncio.sleep(0.2)
+               # asyncio.sleep(0.2)
             else:
                 case_value = int(case_value)
             
