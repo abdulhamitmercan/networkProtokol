@@ -1,7 +1,6 @@
 import redis.asyncio as redis
 import asyncio
 
-
 class WifiManager:
     def __init__(self):
         self._enabled = True 
@@ -15,12 +14,10 @@ class WifiManager:
     async def enable(self):
         print("Wi-Fi etkinleştirildi.")
         self.setEnabled(True)
-     
 
     async def disable(self):
         print("Wi-Fi devre dışı bırakıldı.")
         self.setEnabled(False)
-     
 
 
 class EthernetManager:
@@ -36,12 +33,10 @@ class EthernetManager:
     async def enable(self):
         print("Ethernet etkinleştirildi.")
         self.setEnabled(True)
-       
 
     async def disable(self):
         print("Ethernet devre dışı bırakıldı.")
         self.setEnabled(False)
-       
 
 
 class GsmManager:
@@ -57,31 +52,27 @@ class GsmManager:
     async def enable(self):
         print("GSM etkinleştirildi.")
         self.setEnabled(True)
-        
 
     async def disable(self):
         print("GSM devre dışı bırakıldı.")
         self.setEnabled(False)
-        
+
+
 wifi_manager = WifiManager()
 ethernet_manager = EthernetManager()
 gsm_manager = GsmManager()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 class NetworkManager:
-    
-    
     def __init__(self):
         self._case_number = 8  
-        
+
     def set_case_number(self, case_number):
         self._case_number = case_number
 
     def get_case_number(self):
         return self._case_number
-    
-    
-    
+
     async def handle_case(self, case_number):
         if case_number == '1':
             await wifi_manager.enable()
@@ -121,29 +112,32 @@ class NetworkManager:
     async def check_and_update(self):
         while True:
             self.set_case_number((int)(await redis_client.hget("netWork", "caseVal")))
-            
             await asyncio.sleep(0.1)
-
-
-
-
 
 
 async def main():
     from gsmNetworkManager import GsmModule
     from ethernetNetworkManager import Ethernet
     from wifiNetworkManager import WiFi
-# Global nesneler
+
     network_manager = NetworkManager()
     gsm_module = GsmModule()
     ethernet_control = Ethernet()
-    network_manager = WiFi()
-    await asyncio.gather(network_manager.check_and_update(),
-                         gsm_module.run_all_checks(),
-                         ethernet_control.manage_ethernet(),
-                         network_manager.manage_wifi()
-                        )
+    wifi_manager = WiFi()
 
-asyncio.run(main())
+    await asyncio.gather(
+        network_manager.check_and_update(),
+        gsm_module.run_all_checks(),
+        ethernet_control.manage_ethernet(),
+        wifi_manager.manage_wifi()
+    )
 
-
+# Burada asyncio.run() yerine await main() kullanıyoruz
+if __name__ == "__main__":
+    try:
+        if not asyncio.get_event_loop().is_running():
+            asyncio.run(main())
+        else:
+            asyncio.run(main())  # Eğer zaten çalışan bir event loop varsa
+    except RuntimeError as e:
+        print(f"Bir hata meydana geldi: {e}")
