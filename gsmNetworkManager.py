@@ -2,17 +2,28 @@ import asyncio
 import subprocess
 from networkController import gsm_manager,redis_client
 
+
+# Bu koda https://github.com/abdulhamitmercan den erişebilirsiniz
+# Kod, bir GSM modemini ve bağlantı durumlarını kontrol eden bir sınıf olan `GsmModule`'u tanımlar. 
+# Belirli aralıklarla GSM modemin durumu kontrol edilir, AT komutları ile modemden gelen bilgiler toplanır 
+# ve internet bağlantısı kontrol edilerek sinyal gücü değerlendirilir. 
+# GSM modem bağlantısı, SIM kart durumu, APN, kullanıcı adı ve şifre gibi bilgileri toplar.
+# Ayrıca, belirli bir hizmeti başlatma veya durdurma, internet bağlantısını kontrol etme ve 
+# sinyal gücüne göre internet bağlantı kalitesini değerlendirme işlevlerini yerine getirir. 
+# Son olarak, bu işlevleri sürekli olarak döngü halinde yürütür.
+
+
 gsm_enabled = gsm_manager.isEnabled()  
 gsmService = 'qmi_reconnect.service'
 
 
 class GsmModule:
     def __init__(self):
-        self.is_gsm_up = False  # Modem durumunu takip etmek için
-        self.is_gsm_first_check = True  # İlk kontrol için flag
+        self.is_gsm_up = False  
+        self.is_gsm_first_check = True  
 
     async def run_at_command(self, command):
-        # AT komutunu çalıştır
+        
         result = subprocess.run(['atcom', command], capture_output=True, text=True)
         return result.stdout.strip()
 
@@ -86,14 +97,15 @@ class GsmModule:
             print(f"Servisi başlatırken bir hata oluştu: {e}")
 
     async def run_all_checks(self):
+        # bu kod internetin ana durumunu kontrol etmektedir gsm var mı sonra sim var mı sonra da internet var mı şeklinde ilerlemektedir 
         while True:
             if gsm_enabled:
                 if not self.is_gsm_up:
                     await self.start_service(gsmService)
                     subprocess.run(['sudo', 'ifconfig', 'wwan0', 'up'])
-                    self.is_gsm_up = True  # Modem durumu güncelle
+                    self.is_gsm_up = True  
 
-                # Modem kontrolü
+                
                 modem_status = await self.run_at_command('AT')
                 if "OK" in modem_status:
                     print("Modem bağlıdır.")
@@ -110,10 +122,10 @@ class GsmModule:
                         print(f"APN: {apn_info}")
                         await asyncio.sleep(0.001)
 
-                        username, password = await self.get_credentials()
-                        print(f"Kullanıcı Adı: {username}")
-                        print(f"Şifre: {password}")
-                        await asyncio.sleep(0.001)
+                        # username, password = await self.get_credentials()
+                        # print(f"Kullanıcı Adı: {username}")
+                        # print(f"Şifre: {password}")
+                        # await asyncio.sleep(0.001)
 
                         internet_status = await self.check_internet_connection()
                         print(internet_status)
@@ -136,9 +148,9 @@ class GsmModule:
                 if self.is_gsm_up:
                     await self.stop_service(gsmService)
                     subprocess.run(['sudo', 'ifconfig', 'wwan0', 'down'])
-                    self.is_gsm_up = False  # Modem durumu güncelle
+                    self.is_gsm_up = False  
                     print("GSM Modem kapatıldı.")
             await asyncio.sleep(1)
 
-# Asenkron ana döngü
+
 

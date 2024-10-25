@@ -2,7 +2,12 @@ import asyncio
 import subprocess
 from networkController import wifi_manager, redis_client
 
-# Global değişken
+# Bu koda https://github.com/abdulhamitmercan adresinden erişebilirsiniz
+# Bu kod, Wi-Fi bağlantısını yönetmek için bir sınıf tanımlar.
+# Sınıf, Wi-Fi durumunu kontrol eder, internet bağlantısını test eder ve gerekli durum güncellemelerini Redis veritabanına kaydeder.
+# Asenkron programlama ile Wi-Fi yönetimini sağlar.
+
+
 wifi_enabled = wifi_manager.isEnabled()
 
 class WiFi:
@@ -11,7 +16,7 @@ class WiFi:
 
     async def get_wifi_info(self):
         print("Wi-Fi Bilgileri:")
-        # 'BAND' yerine 'CHAN' veya 'MODE' kullanıyoruz
+       
         result = subprocess.run(['nmcli', '-f', 'SSID,SIGNAL,CHAN', 'device', 'wifi'], capture_output=True, text=True)
         if result.returncode == 0:
             if result.stdout.strip():
@@ -20,7 +25,7 @@ class WiFi:
                 print("Wi-Fi ağı bulunamadı.")
         else:
             print("Wi-Fi bilgileri alınamadı.")
-            print(f"Hata mesajı: {result.stderr.strip()}")  # Hata mesajını yazdır
+            print(f"Hata mesajı: {result.stderr.strip()}")
 
     async def check_wifi_status(self):
         result = subprocess.run(['ip', 'link', 'show', 'wlan0'], capture_output=True, text=True)
@@ -34,7 +39,7 @@ class WiFi:
                 await redis_client.hset("netWork", "wifiInternetStatus", "Wifi İnternet bağlantısı yok.")
         else:
             print("Wi-Fi durumu kontrol edilirken hata oluştu.")
-            print(f"Hata mesajı: {result.stderr.strip()}")  # Hata mesajını yazdır
+            print(f"Hata mesajı: {result.stderr.strip()}") 
 
     async def check_internet_connection(self):
         if self.is_wifi_up:
@@ -46,7 +51,7 @@ class WiFi:
                 await self.get_wifi_info()
             else:
                 print("Wi-Fi internet bağlantısı yok.")
-                print(f"Hata mesajı: {result.stderr.strip()}")  # Hata mesajını yazdır
+                print(f"Hata mesajı: {result.stderr.strip()}")  
                 await redis_client.hset("netWork", "wifiInternetStatus", "Wifi İnternet bağlantısı yok.")
         else:
             print("Wi-Fi durumu: DOWN, internet bağlantısı kontrol edilemez.")
@@ -79,6 +84,6 @@ class WiFi:
             await self.check_wifi_status()
             await self.check_internet_connection()
             await self.toggle_wifi()
-            await asyncio.sleep(5)  # Tüm işlemleri tekrar etmeden önce 5 saniye bekle
+            await asyncio.sleep(5)  
 
 

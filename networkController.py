@@ -1,6 +1,13 @@
 import redis.asyncio as redis
 import asyncio
 
+# Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
+# Bu koda https://github.com/abdulhamitmercan adresinden erişebilirsiniz
+# Bu kod, Wi-Fi, Ethernet ve GSM bağlantılarını yönetmek için çeşitli sınıflar içerir.
+# Bu yöneticiler, belirli bir durumda hangi bağlantının etkinleştirileceğini veya devre dışı bırakılacağını kontrol eder.
+# Ayrıca, Redis veritabanından alınan "caseVal" değerine göre bağlantı durumunu sürekli günceller.
+# Kod, asenkron programlama ile çoklu bağlantıları yönetmeyi ve güncellemeyi sağlar.
+
 class WifiManager:
     def __init__(self):
         self._enabled = True 
@@ -111,8 +118,14 @@ class NetworkManager:
 
     async def check_and_update(self):
         while True:
-            self.set_case_number((int)(await redis_client.hget("netWork", "caseVal")))
-            await asyncio.sleep(0.1)
+            case_value = await redis_client.hget("netWork", "caseVal")
+            if case_value is None:
+                print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
+                case_value = '7'
+            else:
+                case_value = int(case_value)
+            
+            self.set_case_number(case_value)
 
 
 async def main():
@@ -132,12 +145,12 @@ async def main():
         wifi_manager.manage_wifi()
     )
 
-# Burada asyncio.run() yerine await main() kullanıyoruz
+
 if __name__ == "__main__":
     try:
         if not asyncio.get_event_loop().is_running():
             asyncio.run(main())
         else:
-            asyncio.run(main())  # Eğer zaten çalışan bir event loop varsa
+            asyncio.run(main())  # zaten çalışan bir event loop varsa
     except RuntimeError as e:
         print(f"Bir hata meydana geldi: {e}")
