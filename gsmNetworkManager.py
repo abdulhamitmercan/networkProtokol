@@ -122,10 +122,10 @@ class GsmModule:
                         print(f"APN: {apn_info}")
                         await asyncio.sleep(0.001)
 
-                        # username, password = await self.get_credentials()
-                        # print(f"Kullanıcı Adı: {username}")
-                        # print(f"Şifre: {password}")
-                        # await asyncio.sleep(0.001)
+                        username, password = await self.get_credentials()
+                        print(f"Kullanıcı Adı: {username}")
+                        print(f"Şifre: {password}")
+                        await asyncio.sleep(0.001)
 
                         internet_status = await self.check_internet_connection()
                         print(internet_status)
