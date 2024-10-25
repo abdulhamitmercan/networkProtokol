@@ -13,7 +13,7 @@ wifi_enabled = wifi_manager.isEnabled()
 class WiFi:
     def __init__(self):
         self.is_wifi_up = False
-
+        self.is_wifi_first_check = True 
     async def get_wifi_info(self):
         print("Wi-Fi Bilgileri:")
        
@@ -28,18 +28,16 @@ class WiFi:
             print(f"Hata mesajı: {result.stderr.strip()}")
 
     async def check_wifi_status(self):
-        result = subprocess.run(['ip', 'link', 'show', 'wlan0'], capture_output=True, text=True)
-        if result.returncode == 0:
-            if 'state UP' in result.stdout:
+      
+            if self.is_wifi_up:
+                
                 print("Wi-Fi aktive")
-                self.is_wifi_up = True
-            elif 'state DOWN' in result.stdout:
+                
+            else:
                 print("Wi-Fi passive")
-                self.is_wifi_up = False
+
                 await redis_client.hset("netWork", "wifiInternetStatus", "Wifi İnternet bağlantısı yok.")
-        else:
-            print("Wi-Fi durumu kontrol edilirken hata oluştu.")
-            print(f"Hata mesajı: {result.stderr.strip()}") 
+
 
     async def check_internet_connection(self):
         if self.is_wifi_up:
@@ -69,6 +67,11 @@ class WiFi:
                     print("Wi-Fi etkinleştirilemedi.")
                     print(f"Hata mesajı: {result.stderr.strip()}")
         else:
+            
+            if self.is_wifi_first_check:
+                self.is_wifi_up = True
+                self.is_wifi_first_check = False
+                
             if self.is_wifi_up:
                 print("Wi-Fi devre dışı bırakılıyor...")
                 result = subprocess.run(['sudo', 'ifconfig', 'wlan0', 'down'], capture_output=True)
