@@ -57,6 +57,7 @@ class GsmModule:
         return username_info, password_info
 
     async def check_internet_connection(self):
+        print("gsm internet bağlantısı kontrol ediliyor...")
         response = subprocess.run(['ping', '-I', 'wwan0', '-c', '1', '8.8.8.8'], capture_output=True)
         internet_status = "GSM İnternet bağlantısı var." if response.returncode == 0 else "GSM İnternet bağlantısı yok."
         if internet_status == "GSM İnternet bağlantısı var":
@@ -144,7 +145,8 @@ class GsmModule:
                     await asyncio.sleep(0.001)
 
                     internet_status = await self.check_internet_connection()
-                    print(internet_status)
+                    self.logger.info("", filename="gsmNetworkController.py", category="internet info", status=f" {internet_status}")
+                    # print(internet_status)
                     if internet_status == "GSM İnternet bağlantısı var.":
 
                         await asyncio.sleep(0.001)

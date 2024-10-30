@@ -97,8 +97,8 @@ class Ethernet:
     async def check_internet_connection(self):
        
         if self.is_eth_up:  
-            self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="ethernetin İnternet bağlantısı kontrol ediliyor...")
-            # print("ethernetin İnternet bağlantısı kontrol ediliyor...")
+            # self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="ethernetin İnternet bağlantısı kontrol ediliyor...")
+            print("ethernetin İnternet bağlantısı kontrol ediliyor...")
             result = subprocess.run(['ping', '-c', '1', '-I', 'eth0', '8.8.8.8'], capture_output=True, text=True)
             if result.returncode == 0:
                 self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="ethernetin İnternet bağlantısı mevcut.")
