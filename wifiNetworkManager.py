@@ -6,7 +6,7 @@ from networkController import wifi_manager, redis_client
 # Bu kod, Wi-Fi bağlantısını yönetmek için bir sınıf tanımlar.
 # Sınıf, Wi-Fi durumunu kontrol eder, internet bağlantısını test eder ve gerekli durum güncellemelerini Redis veritabanına kaydeder.
 # Asenkron programlama ile Wi-Fi yönetimini sağlar.
-
+# sistem loglanmıştır
 
 wifi_enabled = wifi_manager.isEnabled()
 

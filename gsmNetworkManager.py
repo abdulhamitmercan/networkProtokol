@@ -2,7 +2,7 @@ import asyncio
 import subprocess
 from networkController import gsm_manager,redis_client
 
-
+# Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
 # Bu koda https://github.com/abdulhamitmercan/networkProtokol den erişebilirsiniz
 # Kod, bir GSM modemini ve bağlantı durumlarını kontrol eden bir sınıf olan `GsmModule`'u tanımlar. 
 # Belirli aralıklarla GSM modemin durumu kontrol edilir, AT komutları ile modemden gelen bilgiler toplanır 
@@ -11,7 +11,7 @@ from networkController import gsm_manager,redis_client
 # Ayrıca, belirli bir hizmeti başlatma veya durdurma, internet bağlantısını kontrol etme ve 
 # sinyal gücüne göre internet bağlantı kalitesini değerlendirme işlevlerini yerine getirir. 
 # Son olarak, bu işlevleri sürekli olarak döngü halinde yürütür.
-
+# sistem loglanmıştır
 
 gsm_enabled = gsm_manager.isEnabled()  
 gsmService = 'qmi_reconnect.service'

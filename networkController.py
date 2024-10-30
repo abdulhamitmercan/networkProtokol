@@ -7,6 +7,7 @@ import asyncio
 # Bu yöneticiler, belirli bir durumda hangi bağlantının etkinleştirileceğini veya devre dışı bırakılacağını kontrol eder.
 # Ayrıca, Redis veritabanından alınan "caseVal" değerine göre bağlantı durumunu sürekli günceller.
 # Kod, asenkron programlama ile çoklu bağlantıları yönetmeyi ve güncellemeyi sağlar.
+# sistem loglanmıştır
 
 class WifiManager:
     def __init__(self):

@@ -2,7 +2,7 @@ import asyncio
 import subprocess
 from networkController import ethernet_manager,redis_client
 
-
+# Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
 # Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
 # Bu kod, Ethernet kablosu bağlı olduğunda internet bağlantısını sorgular, 
 # aksi durumlarda ise Ethernet bağlantısını kontrol etmeyip sonlandırır.
