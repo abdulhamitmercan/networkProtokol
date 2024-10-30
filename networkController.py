@@ -127,7 +127,7 @@ class NetworkManager:
                 self.logger.error("", filename="networkController.py", category="network stuation", status="Redis'ten caseVal değeri alınamadı, varsayılan bir değer(7) atanıyor")
                # print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
                 case_value = '7'
-                asyncio.sleep(2)
+                await asyncio.sleep(2)
             else:
                 case_value = int(case_value)
             
