@@ -1,5 +1,6 @@
 import redis.asyncio as redis
 import asyncio
+from debug_logger import DebugLogger
 
 # Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
 # Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
@@ -20,11 +21,11 @@ class WifiManager:
         return self._enabled
 
     async def enable(self):
-        print("Wi-Fi etkinleştirildi.")
+        # print("Wi-Fi etkinleştirildi.")
         self.setEnabled(True)
 
     async def disable(self):
-        print("Wi-Fi devre dışı bırakıldı.")
+        # print("Wi-Fi devre dışı bırakıldı.")
         self.setEnabled(False)
 
 
@@ -39,11 +40,11 @@ class EthernetManager:
         return self._enabled
 
     async def enable(self):
-        print("Ethernet etkinleştirildi.")
+        # print("Ethernet etkinleştirildi.")
         self.setEnabled(True)
 
     async def disable(self):
-        print("Ethernet devre dışı bırakıldı.")
+        # print("Ethernet devre dışı bırakıldı.")
         self.setEnabled(False)
 
 
@@ -58,11 +59,11 @@ class GsmManager:
         return self._enabled
 
     async def enable(self):
-        print("GSM etkinleştirildi.")
+        # print("GSM etkinleştirildi.")
         self.setEnabled(True)
 
     async def disable(self):
-        print("GSM devre dışı bırakıldı.")
+        # print("GSM devre dışı bırakıldı.")
         self.setEnabled(False)
 
 
@@ -72,9 +73,10 @@ gsm_manager = GsmManager()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 class NetworkManager:
-    def __init__(self):
+    def __init__(self,logger=None):
         self._case_number = 8  
-
+        self.logger = logger
+        
     def set_case_number(self, case_number):
         self._case_number = case_number
 
@@ -115,34 +117,38 @@ class NetworkManager:
             await ethernet_manager.disable()
             await gsm_manager.disable()
         else:
-            print("Geçersiz case numarası.")
+            self.logger.error("", filename="networkController.py", category="network stuation", status="geçersiz case numarası")
+            # print("Geçersiz case numarası.")
 
-    async def check_and_update(self):
+    async def internet_check_and_update(self):
         while True:
             case_value = await redis_client.hget("netWork", "caseVal")
             if case_value is None:
+                self.logger.error("", filename="networkController.py", category="network stuation", status="Redis'ten caseVal değeri alınamadı, varsayılan bir değer(7) atanıyor")
                # print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
                 case_value = '7'
-               # asyncio.sleep(0.2)
+                asyncio.sleep(2)
             else:
                 case_value = int(case_value)
             
             self.set_case_number(case_value)
 
+logger = DebugLogger(level=DebugLogger.LEVEL_INFO, format_type=DebugLogger.FORMAT_FULL, log_file_path='network.log')
 
 async def main():
     from gsmNetworkManager import GsmModule
     from ethernetNetworkManager import Ethernet
     from wifiNetworkManager import WiFi
-
-    network_manager = NetworkManager()
-    gsm_module = GsmModule()
-    ethernet_control = Ethernet()
-    wifi_manager = WiFi()
+    
+    
+    network_manager = NetworkManager(logger)
+    gsm_module = GsmModule(logger)
+    ethernet_control = Ethernet(logger)
+    wifi_manager = WiFi(logger)
 
     await asyncio.gather(
-        network_manager.check_and_update(),
-        gsm_module.run_all_checks(),
+        network_manager.internet_check_and_update(),
+        gsm_module.manage_gsm(),
         ethernet_control.manage_ethernet(),
         wifi_manager.manage_wifi()
     )
