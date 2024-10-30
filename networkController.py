@@ -157,7 +157,6 @@ async def main():
 if __name__ == "__main__":
     try:
         loop = asyncio.get_event_loop()
-
         if not loop.is_running():
             asyncio.run(main())  # Event loop yoksa başlat
         else:
