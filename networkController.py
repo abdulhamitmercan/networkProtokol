@@ -156,10 +156,6 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        loop = asyncio.get_event_loop()
-        if not loop.is_running():
-            asyncio.run(main())  # Event loop yoksa başlat
-        else:
-            loop.create_task(main())  # Zaten çalışan bir event loop varsa, görev olarak ekle
+        asyncio.run(main())  # Event loop'u başlat ve tamamla
     except RuntimeError as e:
-        print(f"Bir hata meydana geldi: {e}")
+        print(f"Hata: {e}")

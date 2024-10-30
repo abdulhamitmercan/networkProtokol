@@ -183,6 +183,6 @@ class GsmModule:
             await self.check_internet_connection()  
             await self.get_signal_strength()          
             signal_strength = await self.get_signal_strength()
-            internet_status = await self.check_internet_status()  
+            internet_status = await self.check_internet_connection() 
             await self.evaluate_signal_strength(signal_strength, internet_status)
             await asyncio.sleep(1) 
