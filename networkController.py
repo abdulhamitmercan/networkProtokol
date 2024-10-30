@@ -124,7 +124,7 @@ class NetworkManager:
         while True:
             case_value = await redis_client.hget("netWork", "caseVal")
             if case_value is None:
-                self.logger.error("", filename="networkController.py", category="network stuation", status="Redis'ten caseVal değeri alınamadı, varsayılan bir değer(7) atanıyor")
+                await self.logger.error("", filename="networkController.py", category="network stuation", status="Redis'ten caseVal değeri alınamadı, varsayılan bir değer(7) atanıyor")
                # print("Redis'ten caseVal değeri alınamadı, varsayılan bir değer atanıyor.")
                 case_value = '7'
                 await asyncio.sleep(2)
