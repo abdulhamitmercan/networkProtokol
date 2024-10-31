@@ -1,6 +1,6 @@
 import asyncio
 import subprocess
-from networkController import ethernet_manager,redis_client
+from networkUtils import ethernet_manager,redis_client
 from debug_logger import DebugLogger
 
 # Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.

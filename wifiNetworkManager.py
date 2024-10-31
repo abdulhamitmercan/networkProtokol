@@ -1,6 +1,6 @@
 import asyncio
 import subprocess
-from networkController import wifi_manager, redis_client
+from networkUtils import wifi_manager, redis_client
 
 
 # Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz

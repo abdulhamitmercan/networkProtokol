@@ -1,6 +1,6 @@
 import asyncio
 import subprocess
-from networkController import gsm_manager,redis_client
+from networkUtils import gsm_manager,redis_client
 
 
 # Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
@@ -26,7 +26,7 @@ class GsmModule:
         
     async def run_at_command(self, command):
         
-        result = subprocess.run(['atcom', command], capture_output=True, text=True)
+        result = subprocess.run(['/home/pi/.venv/bin/atcom', command], capture_output=True, text=True)
         return result.stdout.strip()
 
     async def get_modem_name(self):

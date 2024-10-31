@@ -66,7 +66,7 @@ class GsmManager:
         # print("GSM devre dışı bırakıldı.")
         self.setEnabled(False)
 
-
+"""
 wifi_manager = WifiManager()
 ethernet_manager = EthernetManager()
 gsm_manager = GsmManager()
@@ -132,22 +132,23 @@ class NetworkManager:
                 case_value = int(case_value)
             
             self.set_case_number(case_value)
-
+"""
 logger = DebugLogger(level=DebugLogger.LEVEL_INFO, format_type=DebugLogger.FORMAT_FULL, log_file_path='network.log')
 
+from gsmNetworkManager import GsmModule
+from ethernetNetworkManager import Ethernet
+from wifiNetworkManager import WiFi
+
 async def main():
-    from gsmNetworkManager import GsmModule
-    from ethernetNetworkManager import Ethernet
-    from wifiNetworkManager import WiFi
+
     
-    
-    network_manager = NetworkManager(logger)
+    #network_manager = NetworkManager(logger)
     gsm_module = GsmModule(logger)
     ethernet_control = Ethernet(logger)
     wifi_manager = WiFi(logger)
 
     await asyncio.gather(
-        network_manager.internet_check_and_update(),
+        #network_manager.internet_check_and_update(),
         gsm_module.manage_gsm(),
         ethernet_control.manage_ethernet(),
         wifi_manager.manage_wifi()
