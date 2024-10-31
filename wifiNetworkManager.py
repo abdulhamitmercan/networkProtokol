@@ -1,6 +1,6 @@
 import asyncio
 import subprocess
-from networkController import wifi_manager, redis_client
+from networkUtils import wifi_manager, redis_client
 
 
 # Bu koda https://github.com/abdulhamitmercan/networkProtokol adresinden erişebilirsiniz
@@ -37,11 +37,11 @@ class WiFi:
       
             if self.is_wifi_up:
                 
-                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi aktive")
+                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi aktif")
                 # print("Wi-Fi aktive")
                 
             else:
-                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi passive")
+                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi passif")
                 # print("Wi-Fi passive")
 
                 await redis_client.hset("netWork", "wifiInternetStatus", "0") # wifi interent bağlantısı yok
@@ -69,8 +69,8 @@ class WiFi:
         global wifi_enabled
         if wifi_enabled:
             if not self.is_wifi_up:
-                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi etkinleştiriliyor...")
-                # print("Wi-Fi etkinleştiriliyor...")
+                # self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi etkinleştiriliyor...")
+                print("Wi-Fi etkinleştiriliyor...")
                 result = subprocess.run(['sudo', 'ifconfig', 'wlan0', 'up'], capture_output=True)
                 if result.returncode == 0:
                     self.is_wifi_up = True
@@ -87,8 +87,8 @@ class WiFi:
                 self.is_wifi_first_check = False
                 
             if self.is_wifi_up:
-                self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi devre dışı bırakılıyor...")
-                # print("Wi-Fi devre dışı bırakılıyor...")
+                # self.logger.info("", filename="wifiNetworkManager.py", category="wifi info", status="Wi-Fi devre dışı bırakılıyor...")
+                print("Wi-Fi devre dışı bırakılıyor...")
                 result = subprocess.run(['sudo', 'ifconfig', 'wlan0', 'down'], capture_output=True)
                 if result.returncode == 0:
                     self.is_wifi_up = False

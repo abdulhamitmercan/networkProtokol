@@ -1,6 +1,6 @@
 import asyncio
 import subprocess
-from networkController import ethernet_manager,redis_client
+from networkUtils import ethernet_manager,redis_client
 from debug_logger import DebugLogger
 
 # Bu kod Abdulhamit Mercan tarafından Ekim 2024'te yazılmıştır.
@@ -61,16 +61,16 @@ class Ethernet:
         
         if ethernet_enabled:
             if not self.is_eth_up:  # Ethernet kapalıysa aç
-                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet etkinleştiriliyor...")
-                # print("Ethernet etkinleştiriliyor...")
+                # self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet etkinleştiriliyor...")
+                print("Ethernet etkinleştiriliyor...")
                 subprocess.run(['sudo', 'ifconfig', 'eth0', 'up'])
                 self._is_eth_up = True  
                 self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet etkin.")
                 # print("Ethernet etkin.")
         else:
             if self.is_eth_up:  # Ethernet açıksa kapat
-                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet devre dışı bırakılıyor...")
-                # print("Ethernet devre dışı bırakılıyor...")
+                # self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet devre dışı bırakılıyor...")
+                print("Ethernet devre dışı bırakılıyor...")
                 subprocess.run(['sudo', 'ifconfig', 'eth0', 'down'])
                 self._is_eth_up = False  
                 self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet devre dışı")
@@ -81,13 +81,13 @@ class Ethernet:
         result = subprocess.run(['ip', 'link', 'show', 'eth0'], capture_output=True, text=True)
         if result.returncode == 0:
             if 'state UP' in result.stdout:
-                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet  aktive")
+                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet  aktif")
                 # print("Ethernet  aktive")
                 self._is_eth_up = True  
                 await self.check_cable_status()  
                 return True  
             elif 'state DOWN' in result.stdout:
-                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet   passive")
+                self.logger.info("", filename="ethernetNetworkManager.py", category="ethernet info", status="Ethernet   passif")
                 # print("Ethernet    passive")
                 self._is_eth_up = False  
                 await self.check_cable_status()  
